@@ -30,59 +30,28 @@ export default function Navbar() {
     const sections = ['hero', 'about', 'projects', 'how-i-build', 'contact'];
     
     const updateActiveSection = () => {
-      if (window.scrollY < 100) {
-        setActiveSection('hero');
-        return;
-      }
+      // Use hero-intro to match the actual ID in ZoomParallaxIntro.tsx
+      const sections = ['hero-intro', 'about', 'projects', 'how-i-build', 'contact'];
+      const threshold = window.innerHeight * 0.35;
 
-      const projectsSection = document.getElementById('projects');
-      const howIBuildSection = document.getElementById('how-i-build');
+      // Find the last section that has crossed the threshold from the top
+      for (let i = sections.length - 1; i >= 0; i--) {
+        const id = sections[i];
+        const el = document.getElementById(id);
+        if (!el) continue;
 
-      if (projectsSection && howIBuildSection) {
-        const viewportHeight = window.innerHeight;
-        const projectsRect = projectsSection.getBoundingClientRect();
-        const howIBuildRect = howIBuildSection.getBoundingClientRect();
-        const projectsStillPrimary =
-          projectsRect.top <= viewportHeight * 0.32 &&
-          projectsRect.bottom >= viewportHeight * 0.22 &&
-          howIBuildRect.top > viewportHeight * 0.68;
-
-        if (projectsStillPrimary) {
-          setActiveSection('projects');
+        const rect = el.getBoundingClientRect();
+        
+        // If the top of the section has passed the threshold, it's the active one
+        if (rect.top <= threshold) {
+          const sectionKey = id === 'hero-intro' ? 'hero' : id;
+          setActiveSection(sectionKey);
           return;
         }
       }
 
-      const viewportHeight = window.innerHeight;
-      const measuredSections = sections
-        .map((id) => {
-          const el = document.getElementById(id);
-          if (!el) return null;
-
-          const rect = el.getBoundingClientRect();
-          const visibleTop = Math.max(rect.top, 0);
-          const visibleBottom = Math.min(rect.bottom, viewportHeight);
-          const visibleHeight = Math.max(0, visibleBottom - visibleTop);
-          const centerDistance = Math.abs((rect.top + rect.bottom) / 2 - viewportHeight / 2);
-
-          return {
-            id,
-            visibleHeight,
-            centerDistance,
-          };
-        })
-        .filter((section): section is { id: string; visibleHeight: number; centerDistance: number } => section !== null)
-        .sort((a, b) => {
-          if (b.visibleHeight !== a.visibleHeight) {
-            return b.visibleHeight - a.visibleHeight;
-          }
-
-          return a.centerDistance - b.centerDistance;
-        });
-
-      if (!measuredSections.length) return;
-
-      setActiveSection(measuredSections[0].id);
+      // Default to hero if none found
+      setActiveSection('hero');
     };
 
     const handleScroll = () => {

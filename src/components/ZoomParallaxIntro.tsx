@@ -24,8 +24,9 @@ export function ZoomParallaxIntro() {
   });
 
   const smoothProgress = useSpring(scrollYProgress, {
-    stiffness: 80,
-    damping: 20,
+    stiffness: 50,
+    damping: 25,
+    restDelta: 0.001
   });
 
   // Remap transforms to end at 0.95 to eliminate the long delay when scrolling down
@@ -62,7 +63,17 @@ export function ZoomParallaxIntro() {
                 ${index === 6 ? '[&>div]:!top-[22.5vh] [&>div]:!left-[25vw] [&>div]:!h-[15vh] [&>div]:!w-[15vw]' : ''}
               `}
             >
-              <div className="relative overflow-hidden rounded-lg w-full h-full flex items-center justify-center">
+              <motion.div 
+                initial={{ scale: 0, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                transition={{ 
+                  type: "spring", 
+                  stiffness: 120, 
+                  damping: 20, 
+                  delay: 0.1 + (index * 0.15) 
+                }}
+                className="relative overflow-hidden rounded-lg w-full h-full flex items-center justify-center"
+              >
                 <video
                   src={src}
                   autoPlay
@@ -72,7 +83,7 @@ export function ZoomParallaxIntro() {
                   className={`h-full w-full object-cover ${index === 6 ? 'object-top' : ''}`}
                 />
                 <div className={`absolute inset-0 ${index === 0 ? 'bg-black/55' : 'bg-black/25'}`} />
-              </div>
+              </motion.div>
             </motion.div>
           );
         })}

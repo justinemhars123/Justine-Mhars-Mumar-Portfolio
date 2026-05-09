@@ -1,7 +1,7 @@
 import React, { useRef, useEffect } from 'react';
 import { motion } from 'motion/react';
 import { ArrowUpRight } from 'lucide-react';
-import TextType from './ui/TextType';
+import TextType from '../ui/TextType';
 
 export default function Contact() {
   const videoRef = useRef<HTMLVideoElement>(null);

@@ -1,6 +1,6 @@
 import { motion, useScroll, useTransform } from 'motion/react';
 import { ArrowDown, ArrowRight } from 'lucide-react';
-import SplitText from './SplitText';
+import SplitText from '../ui/SplitText';
 
 export default function Hero() {
   const { scrollY } = useScroll();

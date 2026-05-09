@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { motion, AnimatePresence, useInView } from 'motion/react';
 import { ExternalLink, Github, X } from 'lucide-react';
-import { CardStack } from './ui/card-stack';
+import { CardStack } from '../ui/card-stack';
 
 const IMAGE_ROTATION_MS = 4500;
 const IMAGE_TRANSITION_SECONDS = 1.9;

@@ -80,24 +80,24 @@ export function ZoomParallaxIntro() {
         {/* Hero Content - Separate Sticky Layer to prevent massive scaling issues */}
         <motion.div
           style={{ opacity: heroOpacity, y: heroY, scale: heroScale }}
-          className="absolute inset-0 flex flex-col justify-end pb-24 px-16 md:px-24 z-40 pointer-events-none"
+          className="absolute inset-0 flex flex-col justify-end pb-12 md:pb-24 px-6 md:px-24 z-40 pointer-events-none"
         >
           <div className="max-w-4xl text-left pointer-events-auto">
-            <div className="flex flex-col gap-0 mb-6">
-              <h1 className="font-sans text-[48px] md:text-[64px] lg:text-[80px] text-primary leading-[1.1] font-extrabold tracking-tighter">
+            <div className="flex flex-col gap-0 mb-4 md:mb-6">
+              <h1 className="font-sans text-4xl md:text-[64px] lg:text-[80px] text-primary leading-[1.1] font-extrabold tracking-tighter">
                 Justine Mhars
               </h1>
-              <h1 className="font-sans text-[48px] md:text-[64px] lg:text-[80px] text-primary leading-[1.1] font-extrabold tracking-tighter">
+              <h1 className="font-sans text-4xl md:text-[64px] lg:text-[80px] text-primary leading-[1.1] font-extrabold tracking-tighter">
                 Mumar
               </h1>
             </div>
-            <p className="font-serif text-lg md:text-xl text-[#E1E0CC]/60 italic leading-relaxed max-w-xl mb-8">
+            <p className="font-serif text-sm md:text-xl text-[#E1E0CC]/60 italic leading-relaxed max-w-xl mb-6 md:mb-8">
               Full-Stack Developer specializing in AI-powered web applications.
             </p>
             <div className="flex justify-start">
               <a
                 href="#projects"
-                className="group flex items-center gap-2 rounded-full font-sans text-xs font-bold tracking-widest transition-all duration-300 ease-out bg-transparent border border-[#E1E0CC]/40 text-[#E1E0CC] px-6 py-3 hover:bg-[#E1E0CC] hover:text-black uppercase overflow-hidden"
+                className="group flex items-center gap-2 rounded-full font-sans text-[10px] md:text-xs font-bold tracking-widest transition-all duration-300 ease-out bg-transparent border border-[#E1E0CC]/40 text-[#E1E0CC] px-5 py-2.5 md:px-6 md:py-3 hover:bg-[#E1E0CC] hover:text-black uppercase overflow-hidden"
               >
                 View Projects
                 <ArrowRight className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" />

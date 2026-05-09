@@ -211,6 +211,7 @@ function ProjectModal({
       exit={{ opacity: 0 }}
       transition={{ duration: 0.3 }}
       onClick={onClose}
+      data-lenis-prevent
     >
       <motion.div
         className="absolute inset-0 bg-black/85 backdrop-blur-[12px]"
@@ -239,7 +240,7 @@ function ProjectModal({
 
         <div className="flex flex-col min-h-0">
           {/* Top: Image Section */}
-          <div className="relative h-[380px] w-full shrink-0 overflow-hidden rounded-t-2xl bg-black">
+          <div className="relative h-[240px] md:h-[380px] w-full shrink-0 overflow-hidden rounded-t-2xl bg-black">
             <AnimatePresence initial={false} custom={direction}>
               <motion.img
                 key={modalImageIndex}
@@ -292,7 +293,9 @@ function ProjectModal({
           </div>
 
           {/* Bottom: Content Section */}
-          <div className="flex-1 flex flex-col gap-6 overflow-y-auto bg-[#0a0a0a] p-8 pb-12 hide-scrollbar min-h-0">
+          <div 
+            className="flex-1 flex flex-col gap-6 overflow-y-auto bg-[#0a0a0a] p-8 pb-12 hide-scrollbar min-h-0"
+          >
             <div>
               <span className="mb-1 block text-[10px] uppercase tracking-[0.2em] text-[#E1E0CC]/35">
                 {project.tag}
@@ -365,8 +368,6 @@ function ProjectModal({
                   GitHub <Github size={12} className="ml-1.5" />
                 </a>
               ) : null}
-
-
             </div>
           </div>
         </div>
@@ -436,7 +437,7 @@ export default function Projects() {
 
   return (
     <section
-      className="bg-[#161616] px-16 md:px-24 pt-20 pb-32 overflow-visible"
+      className="bg-[#161616] px-6 md:px-24 pt-20 pb-32 overflow-visible"
       id="projects"
       ref={containerRef}
     >
@@ -464,36 +465,44 @@ export default function Projects() {
           animate={isInView ? { opacity: 1, scale: 1 } : {}}
           transition={{ delay: 0.35, duration: 1, ease: [0.16, 1, 0.3, 1] }}
         >
-          <CardStack
-            items={projectItems}
-            index={activeProjectIndex}
-            autoAdvance={false}
-            pauseOnHover={false}
-            showDots={false}
-            cardWidth={640}
-            cardHeight={360}
-            overlap={0.45}
-            spreadDeg={44}
-            maxVisible={5}
-            depthPx={50}
-            tiltXDeg={5}
-            activeLiftPx={16}
-            activeScale={1.04}
-            inactiveScale={0.93}
-            perspectivePx={1400}
-            springStiffness={190}
-            springDamping={30}
-            loop={true}
-            onChangeIndex={(index) => activateProject(index)}
-            onCardClick={(_, { index }) => setExpandedProjectIndex(index)}
-            renderCard={(item, { active }) => (
-              <ProjectCard
-                item={item as ProjectItem}
-                active={active}
-                imgIndex={active && item.id === activeProject.id ? activeImageIndex : 0}
+          {(() => {
+            const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
+            const cWidth = isMobile ? Math.min(window.innerWidth - 48, 480) : 640;
+            const cHeight = isMobile ? cWidth * 0.65 : 360;
+            
+            return (
+              <CardStack
+                items={projectItems}
+                index={activeProjectIndex}
+                autoAdvance={false}
+                pauseOnHover={false}
+                showDots={false}
+                cardWidth={cWidth}
+                cardHeight={cHeight}
+                overlap={isMobile ? 0.3 : 0.45}
+                spreadDeg={isMobile ? 20 : 44}
+                maxVisible={isMobile ? 3 : 5}
+                depthPx={isMobile ? 30 : 50}
+                tiltXDeg={5}
+                activeLiftPx={16}
+                activeScale={1.04}
+                inactiveScale={0.93}
+                perspectivePx={1400}
+                springStiffness={190}
+                springDamping={30}
+                loop={true}
+                onChangeIndex={(index) => activateProject(index)}
+                onCardClick={(_, { index }) => setExpandedProjectIndex(index)}
+                renderCard={(item, { active }) => (
+                  <ProjectCard
+                    item={item as ProjectItem}
+                    active={active}
+                    imgIndex={active && item.id === activeProject.id ? activeImageIndex : 0}
+                  />
+                )}
               />
-            )}
-          />
+            );
+          })()}
         </motion.div>
 
         <div className="mx-auto mt-4 max-w-lg px-6 text-center">

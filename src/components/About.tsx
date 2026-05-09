@@ -26,7 +26,7 @@ export default function About() {
   ];
 
   return (
-    <section ref={containerRef} className="relative px-16 md:px-24 py-16 bg-black overflow-hidden" id="about">
+    <section ref={containerRef} className="relative px-6 md:px-24 py-16 bg-black overflow-hidden" id="about">
       <div className="max-w-7xl mx-auto">
         {/* Section Label */}
         <motion.div
@@ -41,7 +41,7 @@ export default function About() {
 
         {/* ZONE 1: FULL WIDTH HEADING */}
         <div className="mb-6">
-          <h2 className="font-sans text-4xl md:text-5xl lg:text-6xl text-[#E1E0CC] leading-[1.05] tracking-[-0.02em] font-bold text-left">
+          <h2 className="font-sans text-3xl md:text-5xl lg:text-6xl text-[#E1E0CC] leading-[1.05] tracking-[-0.02em] font-bold text-left">
             <motion.span
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}

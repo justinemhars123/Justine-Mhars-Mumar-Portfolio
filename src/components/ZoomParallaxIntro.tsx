@@ -10,7 +10,7 @@ const videos = [
   { src: 'https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260319_055001_8e16d972-3b2b-441c-86ad-2901a54682f9.mp4' }, // 1: Top Center / Right
   { src: 'https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260506_031045_0e1165dd-ab48-46e3-ad3d-5fe77f217647.mp4' }, // 2: Top Left
   { src: 'https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260429_115139_0fc6bd3d-3631-4d26-ab9b-28293887dcc9.mp4' }, // 3: Middle Right
-  { src: 'https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260505_110052_2e127257-5236-40b1-ba48-4690260f1185.mp4' }, // 4: Bottom Center / Right
+  { src: 'https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260314_131748_f2ca2a28-fed7-44c8-b9a9-bd9acdd5ec31.mp4' }, // 4: Bottom Center / Right
   { src: 'https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260324_151826_c7218672-6e92-402c-9e45-f1e0f454bdc4.mp4' }, // 5: Bottom Left
   { src: 'https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260416_031918_443d301c-b6d9-4a18-b102-c946a16d86ad.mp4' }, // 6: Bottom Far Right
 ];
@@ -36,7 +36,7 @@ export function ZoomParallaxIntro() {
   const scale6 = useTransform(smoothProgress, [0, 0.95], [1, 6]);
   const scale8 = useTransform(smoothProgress, [0, 0.95], [1, 8]);
   const scale9 = useTransform(smoothProgress, [0, 0.95], [1, 9]);
-  
+
   // Fade in hero content near the end of the zoom
   const heroOpacity = useTransform(smoothProgress, [0.75, 0.95], [0, 1]);
   const heroY = useTransform(smoothProgress, [0.75, 0.95], [20, 0]);
@@ -63,14 +63,14 @@ export function ZoomParallaxIntro() {
                 ${index === 6 ? '[&>div]:!top-[22.5vh] [&>div]:!left-[25vw] [&>div]:!h-[15vh] [&>div]:!w-[15vw]' : ''}
               `}
             >
-              <motion.div 
+              <motion.div
                 initial={{ scale: 0, opacity: 0 }}
                 animate={{ scale: 1, opacity: 1 }}
-                transition={{ 
-                  type: "spring", 
-                  stiffness: 120, 
-                  damping: 20, 
-                  delay: 0.1 + (index * 0.15) 
+                transition={{
+                  type: "spring",
+                  stiffness: 120,
+                  damping: 20,
+                  delay: 0.1 + (index * 0.15)
                 }}
                 className="relative overflow-hidden rounded-lg w-full h-full flex items-center justify-center"
               >

@@ -1,9 +1,16 @@
-import { motion } from 'motion/react';
-import { useRef } from 'react';
+import { motion, useMotionValueEvent, useScroll, useTransform } from 'motion/react';
+import { useRef, useState } from 'react';
 import Lanyard from '../ui/Lanyard';
 
 export default function About() {
-  const containerRef = useRef<HTMLDivElement>(null);
+  const sectionRef = useRef<HTMLElement>(null);
+  const [isExperienceVisible, setIsExperienceVisible] = useState(false);
+  const [showExperienceBullets, setShowExperienceBullets] = useState(false);
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ['start start', 'end end'],
+  });
+  const trackX = useTransform(scrollYProgress, [0, 1], ['0%', '-50%']);
 
   const expertise = [
     {
@@ -26,138 +33,216 @@ export default function About() {
     }
   ];
 
+  const experienceHighlights = [
+    'Built full-stack web applications, AI agents, and a 3D horror game, contributing to internal tools and workflows across multiple projects.',
+    'Applied prompt engineering techniques to design and optimize AI-powered tools and automated workflows for company use.',
+    'Curated and structured training datasets for AI development through web crawling and systematic data compilation.',
+  ];
+
+  useMotionValueEvent(scrollYProgress, 'change', (latest) => {
+    setIsExperienceVisible((current) => {
+      if (latest > 0.35) return true;
+      if (latest < 0.3) return false;
+      return current;
+    });
+
+    setShowExperienceBullets((current) => {
+      if (latest > 0.55) return true;
+      if (latest < 0.5) return false;
+      return current;
+    });
+  });
+
   return (
-    <section ref={containerRef} className="relative px-6 md:px-24 py-16 bg-black overflow-visible" id="about">
-      <div className="max-w-7xl mx-auto">
-        <div className="grid grid-cols-1 md:grid-cols-[60%_40%] align-items-start gap-0 mb-4">
-          <div className="w-full">
-            {/* Section Label */}
-            <motion.div
-              initial={{ opacity: 0, y: -8 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: false, margin: "-80px" }}
-              transition={{ duration: 0.5, ease: "easeOut" }}
-              className="font-sans text-[10px] font-light tracking-[0.15em] text-[#E1E0CC]/30 uppercase mb-6"
-            >
-              ABOUT ME
-            </motion.div>
-
-            {/* ZONE 1: HEADING */}
-            <div className="mb-6">
-              <h2 className="font-sans text-3xl md:text-5xl lg:text-6xl text-[#E1E0CC] leading-[1.05] tracking-[-0.02em] font-bold text-left">
-                <motion.span
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: false }}
-                  transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
-                  className="block"
-                >
-                  Building modern
-                </motion.span>
-                <motion.span
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 0.7, y: 0 }}
-                  viewport={{ once: false }}
-                  transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1], delay: 0.1 }}
-                  className="block font-serif italic font-light opacity-70"
-                >
-                  AI-powered
-                </motion.span>
-                <motion.span
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: false }}
-                  transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1], delay: 0.2 }}
-                  className="block"
-                >
-                  digital experiences.
-                </motion.span>
-              </h2>
-
-              <motion.div
-                initial={{ scaleX: 0, opacity: 0 }}
-                whileInView={{ scaleX: 1, opacity: 1 }}
-                viewport={{ once: false, margin: "-80px" }}
-                transition={{ duration: 0.9, ease: "easeOut", delay: 0.4 }}
-                style={{ transformOrigin: "left center" }}
-                className="mt-6 border-t border-[#E1E0CC]/[0.08] w-full"
-              />
-            </div>
-
-            {/* ZONE 2: TWO PARAGRAPH COLUMNS */}
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
-              <motion.div
-                initial={{ opacity: 0, y: 16 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: false, margin: "-80px" }}
-                transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1], delay: 0.5 }}
-              >
-                <p className="font-sans text-sm text-[#E1E0CC]/50 leading-relaxed font-light">
-                  I turn ideas into usable systems by balancing creativity with functionality, focusing on digital experiences that feel natural from the first wireframe to the final AI integration.
-                </p>
-              </motion.div>
-              <motion.div
-                initial={{ opacity: 0, y: 16 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: false, margin: "-80px" }}
-                transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1], delay: 0.65 }}
-              >
-                <p className="font-sans text-sm text-[#E1E0CC]/50 leading-relaxed font-light">
-                  With a stack built on React, Laravel, and Python, I build products that prioritize the user's journey. I believe that modern development isn't just about code, it's about designing better ways for people to work and interact.
-                </p>
-              </motion.div>
-            </div>
-          </div>
-
-          <div className="hidden md:flex justify-center items-start h-[420px] overflow-x-visible overflow-y-hidden relative">
-            <Lanyard position={[0, 0, 13]} fov={20} />
-          </div>
-        </div>
-
+    <section ref={sectionRef} className="relative h-[300vh] bg-black" id="about">
+      <div className="sticky top-0 h-screen overflow-hidden">
         <motion.div
-          initial={{ scaleX: 0, opacity: 0 }}
-          whileInView={{ scaleX: 1, opacity: 1 }}
-          viewport={{ once: false, margin: "-80px" }}
-          transition={{ duration: 0.9, ease: "easeOut", delay: 0.4 }}
-          style={{ transformOrigin: "left center" }}
-          className="mt-8 mb-8 border-t border-[#E1E0CC]/[0.08] w-full"
-        />
+          className="flex h-full w-[200%]"
+          style={{ x: trackX }}
+        >
+          <div className="w-1/2 shrink-0">
+            <div className="relative px-6 md:px-24 py-16 bg-black overflow-visible min-h-screen">
+              <div className="max-w-7xl mx-auto">
+                <div className="grid grid-cols-1 md:grid-cols-[60%_40%] align-items-start gap-0 mb-4">
+                  <div className="w-full">
+                    {/* Section Label */}
+                    <motion.div
+                      initial={{ opacity: 0, y: -8 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      viewport={{ once: false, margin: "-80px" }}
+                      transition={{ duration: 0.5, ease: "easeOut" }}
+                      className="font-sans text-[10px] font-light tracking-[0.15em] text-[#E1E0CC]/30 uppercase mb-6"
+                    >
+                      ABOUT ME
+                    </motion.div>
 
-        {/* ZONE 3: 3-COLUMN EXPERTISE DOMAIN GRID */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {expertise.map((item, index) => (
-            <motion.div
-              key={item.id}
-              initial={{ opacity: 0, scale: 0.95 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-              viewport={{ once: false, margin: "-80px" }}
-              transition={{ duration: 0.6, delay: 0.1 * index, ease: [0.16, 1, 0.3, 1] }}
-              className="bg-[#E1E0CC]/[0.03] border border-[#E1E0CC]/[0.08] rounded-xl p-5"
-            >
-              <div className="font-sans text-[10px] tracking-[0.2em] text-[#E1E0CC]/25 uppercase mb-3">
-                {item.id}
+                    {/* ZONE 1: HEADING */}
+                    <div className="mb-6">
+                      <h2 className="font-sans text-3xl md:text-5xl lg:text-6xl text-[#E1E0CC] leading-[1.05] tracking-[-0.02em] font-bold text-left">
+                        <motion.span
+                          initial={{ opacity: 0, y: 20 }}
+                          whileInView={{ opacity: 1, y: 0 }}
+                          viewport={{ once: false }}
+                          transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+                          className="block"
+                        >
+                          Building modern
+                        </motion.span>
+                        <motion.span
+                          initial={{ opacity: 0, y: 20 }}
+                          whileInView={{ opacity: 0.7, y: 0 }}
+                          viewport={{ once: false }}
+                          transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1], delay: 0.1 }}
+                          className="block font-serif italic font-light opacity-70"
+                        >
+                          AI-powered
+                        </motion.span>
+                        <motion.span
+                          initial={{ opacity: 0, y: 20 }}
+                          whileInView={{ opacity: 1, y: 0 }}
+                          viewport={{ once: false }}
+                          transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1], delay: 0.2 }}
+                          className="block"
+                        >
+                          digital experiences.
+                        </motion.span>
+                      </h2>
+
+                      <motion.div
+                        initial={{ scaleX: 0, opacity: 0 }}
+                        whileInView={{ scaleX: 1, opacity: 1 }}
+                        viewport={{ once: false, margin: "-80px" }}
+                        transition={{ duration: 0.9, ease: "easeOut", delay: 0.4 }}
+                        style={{ transformOrigin: "left center" }}
+                        className="mt-6 border-t border-[#E1E0CC]/[0.08] w-full"
+                      />
+                    </div>
+
+                    {/* ZONE 2: TWO PARAGRAPH COLUMNS */}
+                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+                      <motion.div
+                        initial={{ opacity: 0, y: 16 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: false, margin: "-80px" }}
+                        transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1], delay: 0.5 }}
+                      >
+                        <p className="font-sans text-sm text-[#E1E0CC]/50 leading-relaxed font-light">
+                          I turn ideas into usable systems by balancing creativity with functionality, focusing on digital experiences that feel natural from the first wireframe to the final AI integration.
+                        </p>
+                      </motion.div>
+                      <motion.div
+                        initial={{ opacity: 0, y: 16 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: false, margin: "-80px" }}
+                        transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1], delay: 0.65 }}
+                      >
+                        <p className="font-sans text-sm text-[#E1E0CC]/50 leading-relaxed font-light">
+                          With a stack built on React, Laravel, and Python, I build products that prioritize the user's journey. I believe that modern development isn't just about code, it's about designing better ways for people to work and interact.
+                        </p>
+                      </motion.div>
+                    </div>
+                  </div>
+
+                  <div className="hidden md:flex justify-center items-start h-[420px] overflow-x-visible overflow-y-hidden relative">
+                    <Lanyard position={[0, 0, 13]} fov={20} />
+                  </div>
+                </div>
+
+                <motion.div
+                  initial={{ scaleX: 0, opacity: 0 }}
+                  whileInView={{ scaleX: 1, opacity: 1 }}
+                  viewport={{ once: false, margin: "-80px" }}
+                  transition={{ duration: 0.9, ease: "easeOut", delay: 0.4 }}
+                  style={{ transformOrigin: "left center" }}
+                  className="mt-8 mb-8 border-t border-[#E1E0CC]/[0.08] w-full"
+                />
+
+                {/* ZONE 3: 3-COLUMN EXPERTISE DOMAIN GRID */}
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                  {expertise.map((item, index) => (
+                    <motion.div
+                      key={item.id}
+                      initial={{ opacity: 0, scale: 0.95 }}
+                      whileInView={{ opacity: 1, scale: 1 }}
+                      viewport={{ once: false, margin: "-80px" }}
+                      transition={{ duration: 0.6, delay: 0.1 * index, ease: [0.16, 1, 0.3, 1] }}
+                      className="bg-[#E1E0CC]/[0.03] border border-[#E1E0CC]/[0.08] rounded-xl p-5"
+                    >
+                      <div className="font-sans text-[10px] tracking-[0.2em] text-[#E1E0CC]/25 uppercase mb-3">
+                        {item.id}
+                      </div>
+                      <h4 className="font-semibold text-sm text-[#E1E0CC] mb-1.5">
+                        {item.category}
+                      </h4>
+                      <p className="font-sans text-xs text-[#E1E0CC]/45 leading-relaxed mb-3">
+                        {item.description}
+                      </p>
+                      <div className="flex flex-wrap gap-1.5">
+                        {item.skills.map((skill) => (
+                          <span
+                            key={skill}
+                            className="text-[10px] font-sans font-light text-[#E1E0CC]/45 border border-[#E1E0CC]/15 px-2 py-0.5 rounded-full uppercase tracking-[0.08em]"
+                          >
+                            {skill}
+                          </span>
+                        ))}
+                      </div>
+                    </motion.div>
+                  ))}
+                </div>
               </div>
-              <h4 className="font-semibold text-sm text-[#E1E0CC] mb-1.5">
-                {item.category}
-              </h4>
-              <p className="font-sans text-xs text-[#E1E0CC]/45 leading-relaxed mb-3">
-                {item.description}
-              </p>
-              <div className="flex flex-wrap gap-1.5">
-                {item.skills.map((skill) => (
-                  <span
-                    key={skill}
-                    className="text-[10px] font-sans font-light text-[#E1E0CC]/45 border border-[#E1E0CC]/15 px-2 py-0.5 rounded-full uppercase tracking-[0.08em]"
-                  >
-                    {skill}
-                  </span>
-                ))}
-              </div>
-            </motion.div>
-          ))}
-        </div>
+              <div className="absolute bottom-0 left-0 right-0 h-[1px] bg-[#E1E0CC]/[0.06] z-10" />
+            </div>
+          </div>
+
+          <div className="w-1/2 shrink-0">
+            <div className="relative flex min-h-screen items-center overflow-visible bg-black px-6 py-10 md:px-24">
+              <div className="mx-auto w-full max-w-7xl">
+              <motion.div
+                initial={{ opacity: 0, x: 36 }}
+                animate={isExperienceVisible ? { opacity: 1, x: 0 } : { opacity: 0.35, x: 36 }}
+                transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+                className="w-full"
+              >
+                <div className="mb-6 font-sans text-[10px] font-light uppercase tracking-[0.15em] text-[#E1E0CC]/30">
+                  EXPERIENCE
+                </div>
+
+                <h2 className="max-w-5xl font-sans text-3xl font-bold leading-[1.05] tracking-[-0.02em] text-[#E1E0CC] md:text-5xl lg:text-6xl">
+                  IT Intern — Lifewood Data Technology
+                </h2>
+
+                <p className="mt-5 border-t border-[#E1E0CC]/[0.08] pt-5 font-sans text-sm font-light leading-relaxed text-[#E1E0CC]/50 md:text-base">
+                  January – May 2026 · 540 hours · On-site Internship
+                </p>
+
+                <div className="mt-8 space-y-4">
+                  {experienceHighlights.map((item, index) => (
+                    <motion.div
+                      key={item}
+                      initial={{ opacity: 0, y: 18 }}
+                      animate={showExperienceBullets ? { opacity: 1, y: 0 } : { opacity: 0, y: 18 }}
+                      transition={{
+                        duration: 0.5,
+                        delay: showExperienceBullets ? index * 0.18 : 0,
+                        ease: [0.16, 1, 0.3, 1],
+                      }}
+                      className="flex gap-3 rounded-xl border border-[#E1E0CC]/[0.08] bg-[#E1E0CC]/[0.03] p-5"
+                    >
+                      <span className="pt-1 text-sm text-[#E1E0CC]/45">•</span>
+                      <p className="font-sans text-sm font-light leading-relaxed text-[#E1E0CC]/58">
+                        {item}
+                      </p>
+                    </motion.div>
+                  ))}
+                </div>
+              </motion.div>
+            </div>
+              <div className="absolute bottom-0 left-0 right-0 h-[1px] bg-[#E1E0CC]/[0.06] z-10" />
+            </div>
+          </div>
+        </motion.div>
       </div>
-      <div className="absolute bottom-0 left-0 right-0 h-[1px] bg-[#E1E0CC]/[0.06] z-10" />
     </section>
   );
 }

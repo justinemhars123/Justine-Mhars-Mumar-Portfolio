@@ -55,11 +55,12 @@ function Band({ maxSpeed = 50, minSpeed = 0, isMobile = false }) {
 
   useEffect(() => {
     if (idTexture) {
-      idTexture.flipY = false;
+      idTexture.flipY = true;
       idTexture.center.set(0.5, 0.5);
       idTexture.rotation = Math.PI;
       idTexture.repeat.set(1.2, 1.2);
       idTexture.offset.set(-0.3, -0.1);
+      idTexture.needsUpdate = true;
     }
   }, [idTexture]);
 

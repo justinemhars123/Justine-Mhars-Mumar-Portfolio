@@ -5,13 +5,14 @@ import { Canvas, extend, useFrame } from '@react-three/fiber';
 import { useGLTF, useTexture, Environment, Lightformer } from '@react-three/drei';
 import { BallCollider, CuboidCollider, Physics, RigidBody, useRopeJoint, useSphericalJoint, RigidBodyApi } from '@react-three/rapier';
 import { MeshLineGeometry, MeshLineMaterial } from 'meshline';
-import cardGLB from '../../assets/lanyard/card.glb';
-import lanyard from '../../assets/lanyard/lanyard.png';
-import idCardBase from '../../assets/lanyard/ID.png';
 import * as THREE from 'three';
 import './Lanyard.css';
 
 extend({ MeshLineGeometry, MeshLineMaterial });
+
+const CARD_GLB_PATH = '/Assets/lanyard/card.glb';
+const LANYARD_TEXTURE_PATH = '/Assets/lanyard/lanyard.png';
+const ID_CARD_BASE_PATH = '/Assets/lanyard/ID.png';
 
 export default function Lanyard({ position = [0, 0, 30] as [number, number, number], gravity = [0, -40, 0] as [number, number, number], fov = 20, transparent = true }) {
   const [isMobile, setIsMobile] = useState(() => typeof window !== 'undefined' && window.innerWidth < 768);
@@ -48,9 +49,9 @@ function Band({ maxSpeed = 50, minSpeed = 0, isMobile = false }) {
 
   const vec = new THREE.Vector3(), ang = new THREE.Vector3(), rot = new THREE.Vector3(), dir = new THREE.Vector3();
   const segmentProps = { type: 'dynamic' as const, canSleep: true, colliders: false, angularDamping: 4, linearDamping: 4 };
-  const { nodes, materials } = useGLTF(cardGLB) as any;
-  const texture = useTexture(lanyard);
-  const idTexture = useTexture(idCardBase);
+  const { nodes, materials } = useGLTF(CARD_GLB_PATH) as any;
+  const texture = useTexture(LANYARD_TEXTURE_PATH);
+  const idTexture = useTexture(ID_CARD_BASE_PATH);
 
   useEffect(() => {
     if (idTexture) {

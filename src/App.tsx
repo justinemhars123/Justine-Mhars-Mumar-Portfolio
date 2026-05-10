@@ -12,10 +12,13 @@ import HowIBuild from './components/sections/HowIBuild';
 import Contact from './components/sections/Contact';
 import LoadingScreen from './components/LoadingScreen';
 import { ZoomParallaxIntro } from './components/ui/ZoomParallaxIntro';
-import { AnimatePresence, motion } from 'motion/react';
+import { AnimatePresence } from 'motion/react';
 
 export default function App() {
   const [loading, setLoading] = useState(false);
+
+  // Hide the scroll hint as soon as the user starts scrolling
+  const [introComplete, setIntroComplete] = useState(false);
 
   useEffect(() => {
     // Reset scroll to top on refresh
@@ -27,7 +30,7 @@ export default function App() {
 
   useEffect(() => {
     if (loading) return;
-    
+
     let lenis: any;
     import('lenis').then(({ default: Lenis }) => {
       lenis = new Lenis();
@@ -41,6 +44,18 @@ export default function App() {
     return () => {
       if (lenis) lenis.destroy();
     };
+  }, [loading]);
+
+  useEffect(() => {
+    if (loading) return;
+
+    const handleScroll = () => {
+      // ~15% of viewport height of scroll = user has clearly started scrolling
+      setIntroComplete(window.scrollY > window.innerHeight * 0.15);
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
   }, [loading]);
 
   return (
@@ -61,6 +76,49 @@ export default function App() {
             <HowIBuild />
             <Contact />
           </main>
+        </div>
+      )}
+
+      {/* Scroll hint — rendered at root level, completely outside the parallax
+          stacking context, so it can never be trapped behind any image panel.
+          z-index 99999 guarantees it floats above everything. */}
+      {!loading && !introComplete && (
+        <div
+          style={{
+            position: 'fixed',
+            bottom: 32,
+            left: '50%',
+            zIndex: 99999,
+            pointerEvents: 'none',
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            gap: 8,
+            animation: 'fadeInHint 0.8s ease 1.5s both',
+          }}
+        >
+          <span
+            style={{
+              fontSize: 10,
+              letterSpacing: '0.25em',
+              color: 'rgba(225, 224, 204, 0.9)',
+              fontFamily: 'Almarai, sans-serif',
+              textTransform: 'uppercase',
+              whiteSpace: 'nowrap',
+              textShadow: '0 0 20px rgba(0,0,0,0.8)',
+            }}
+          >
+            SCROLL TO EXPLORE
+          </span>
+          <div
+            style={{
+              width: 1,
+              height: 48,
+              background: 'linear-gradient(to bottom, rgba(225,224,204,0.8), transparent)',
+              boxShadow: '0 0 8px rgba(225,224,204,0.3)',
+              animation: 'scrollLine 1.8s ease-in-out infinite',
+            }}
+          />
         </div>
       )}
     </>

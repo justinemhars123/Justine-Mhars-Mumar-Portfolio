@@ -1,13 +1,56 @@
 import { motion } from 'motion/react';
+import { useState } from 'react';
 import { Code2, Zap, Layout, Server, Terminal, Sparkles, Bot, Rocket, Settings2 } from 'lucide-react';
 
 const technologies = [
-  { name: 'React', icon: Layout, category: 'Frontend', color: 'text-blue-400' },
-  { name: 'Laravel', icon: Server, category: 'Framework', color: 'text-red-500' },
-  { name: 'Python', icon: Terminal, category: 'Logic', color: 'text-yellow-400' },
-  { name: 'Tailwind CSS', icon: Zap, category: 'Styling', color: 'text-cyan-400' },
-  { name: 'AI Integration', icon: Sparkles, category: 'Intelligence', color: 'text-purple-400' },
-  { name: 'Prompt Engineering', icon: Bot, category: 'AI UX', color: 'text-green-400' },
+  {
+    name: 'React',
+    icon: Layout,
+    category: 'Frontend',
+    hoverIconColor: '#61DAFB',
+    hoverCircleBackground: 'rgba(97,218,251,0.12)',
+    hoverBorderColor: 'rgba(97,218,251,0.2)',
+  },
+  {
+    name: 'Laravel',
+    icon: Server,
+    category: 'Framework',
+    hoverIconColor: '#FF2D20',
+    hoverCircleBackground: 'rgba(255,45,32,0.12)',
+    hoverBorderColor: 'rgba(255,45,32,0.2)',
+  },
+  {
+    name: 'Python',
+    icon: Terminal,
+    category: 'Logic',
+    hoverIconColor: '#3776AB',
+    hoverCircleBackground: 'rgba(55,118,171,0.12)',
+    hoverBorderColor: 'rgba(55,118,171,0.2)',
+  },
+  {
+    name: 'Tailwind CSS',
+    icon: Zap,
+    category: 'Styling',
+    hoverIconColor: '#38BDF8',
+    hoverCircleBackground: 'rgba(56,189,248,0.12)',
+    hoverBorderColor: 'rgba(56,189,248,0.2)',
+  },
+  {
+    name: 'AI Integration',
+    icon: Sparkles,
+    category: 'Intelligence',
+    hoverIconColor: '#A78BFA',
+    hoverCircleBackground: 'rgba(167,139,250,0.12)',
+    hoverBorderColor: 'rgba(167,139,250,0.2)',
+  },
+  {
+    name: 'Prompt Engineering',
+    icon: Bot,
+    category: 'AI UX',
+    hoverIconColor: '#A78BFA',
+    hoverCircleBackground: 'rgba(167,139,250,0.12)',
+    hoverBorderColor: 'rgba(167,139,250,0.2)',
+  },
 ];
 
 const methodology = [
@@ -38,6 +81,8 @@ const methodology = [
 ];
 
 export default function HowIBuild() {
+  const [hoveredCard, setHoveredCard] = useState<string | null>(null);
+
   return (
     <section className="py-40 bg-[#161616] px-16 md:px-24" id="how-i-build">
       <div className="max-w-7xl mx-auto">
@@ -70,14 +115,69 @@ export default function HowIBuild() {
             {[...technologies, ...technologies, ...technologies].map((tech, index) => (
               <div
                 key={`${tech.name}-${index}`}
-                className="bg-[#1a1a1a] border border-[#E1E0CC]/5 rounded-xl p-8 flex flex-col items-center justify-center gap-5 min-w-[240px] group hover:border-[#E1E0CC]/20 transition-all duration-500"
+                onMouseEnter={() => setHoveredCard(`${tech.name}-${index}`)}
+                onMouseLeave={() => setHoveredCard(null)}
+                className="rounded-xl p-8 flex flex-col items-center justify-center gap-5 min-w-[240px]"
+                style={{
+                  background: hoveredCard === `${tech.name}-${index}`
+                    ? 'rgba(225, 224, 204, 0.07)'
+                    : 'rgba(225, 224, 204, 0.04)',
+                  border: `1px solid ${hoveredCard === `${tech.name}-${index}`
+                    ? tech.hoverBorderColor ?? 'rgba(225,224,204,0.2)'
+                    : 'rgba(225, 224, 204, 0.08)'}`,
+                  transform: hoveredCard === `${tech.name}-${index}` ? 'translateY(-2px)' : 'translateY(0)',
+                  boxShadow: hoveredCard === `${tech.name}-${index}`
+                    ? '0 8px 24px rgba(0,0,0,0.3)'
+                    : 'none',
+                  transition:
+                    'transform 0.3s ease, background 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease',
+                }}
               >
-                <div className="p-4 bg-[#161616] rounded-full border border-[#E1E0CC]/5 group-hover:border-[#E1E0CC]/20 group-hover:scale-110 transition-all duration-500">
-                  <tech.icon className={`w-10 h-10 ${tech.color} opacity-70 group-hover:opacity-100 transition-opacity`} />
+                <div
+                  className="p-4 rounded-full"
+                  style={{
+                    background: hoveredCard === `${tech.name}-${index}`
+                      ? tech.hoverCircleBackground ?? 'rgba(225,224,204,0.12)'
+                      : 'rgba(225, 224, 204, 0.06)',
+                    border: '1px solid rgba(225, 224, 204, 0.08)',
+                    transition:
+                      'color 0.3s ease, background 0.3s ease, border-color 0.3s ease',
+                  }}
+                >
+                  <tech.icon
+                    className="w-10 h-10"
+                    style={{
+                      color: hoveredCard === `${tech.name}-${index}`
+                        ? tech.hoverIconColor ?? 'rgba(225,224,204,1)'
+                        : 'rgba(225, 224, 204, 0.7)',
+                      transition:
+                        'color 0.3s ease, background 0.3s ease, border-color 0.3s ease',
+                    }}
+                  />
                 </div>
                 <div className="text-center">
-                  <p className="font-sans text-sm font-bold tracking-[0.2em] text-[#E1E0CC] mb-1.5 uppercase">{tech.name}</p>
-                  <p className="font-sans text-[10px] font-bold tracking-[0.15em] text-[#E1E0CC]/30 uppercase">{tech.category}</p>
+                  <p
+                    className="font-sans text-sm font-medium tracking-[0.2em] mb-1.5 uppercase"
+                    style={{
+                      color: hoveredCard === `${tech.name}-${index}`
+                        ? 'rgba(225, 224, 204, 1)'
+                        : 'rgba(225, 224, 204, 0.7)',
+                      transition: 'color 0.3s ease',
+                    }}
+                  >
+                    {tech.name}
+                  </p>
+                  <p
+                    className="font-sans text-[10px] font-bold tracking-[0.15em] uppercase"
+                    style={{
+                      color: hoveredCard === `${tech.name}-${index}`
+                        ? 'rgba(225, 224, 204, 0.5)'
+                        : 'rgba(225, 224, 204, 0.3)',
+                      transition: 'color 0.3s ease',
+                    }}
+                  >
+                    {tech.category}
+                  </p>
                 </div>
               </div>
             ))}
@@ -121,4 +221,3 @@ export default function HowIBuild() {
     </section>
   );
 }
-

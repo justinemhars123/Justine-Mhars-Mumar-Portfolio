@@ -21,9 +21,9 @@ export default function About() {
     },
     {
       id: "02",
-      category: "Full-Stack Development",
+      category: "Software Development",
       skills: ["React", "Laravel", "Python", "Tailwind CSS"],
-      description: "Building responsive applications where frontend design meets backend logic, focusing on usability in real-world systems."
+      description: "Building scalable, maintainable software systems where clean architecture meets real-world usability and performance."
     },
     {
       id: "03",
@@ -198,46 +198,46 @@ export default function About() {
           <div className="w-1/2 shrink-0">
             <div className="relative flex min-h-screen items-center overflow-visible bg-black px-6 py-10 md:px-24">
               <div className="mx-auto w-full max-w-7xl">
-              <motion.div
-                initial={{ opacity: 0, x: 36 }}
-                animate={isExperienceVisible ? { opacity: 1, x: 0 } : { opacity: 0.35, x: 36 }}
-                transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-                className="w-full"
-              >
-                <div className="mb-6 font-sans text-[10px] font-light uppercase tracking-[0.15em] text-[#E1E0CC]/30">
-                  EXPERIENCE
-                </div>
+                <motion.div
+                  initial={{ opacity: 0, x: 36 }}
+                  animate={isExperienceVisible ? { opacity: 1, x: 0 } : { opacity: 0.35, x: 36 }}
+                  transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+                  className="w-full"
+                >
+                  <div className="mb-6 font-sans text-[10px] font-light uppercase tracking-[0.15em] text-[#E1E0CC]/30">
+                    EXPERIENCE
+                  </div>
 
-                <h2 className="max-w-5xl font-sans text-3xl font-bold leading-[1.05] tracking-[-0.02em] text-[#E1E0CC] md:text-5xl lg:text-6xl">
-                  IT Intern — Lifewood Data Technology
-                </h2>
+                  <h2 className="max-w-5xl font-sans text-3xl font-bold leading-[1.05] tracking-[-0.02em] text-[#E1E0CC] md:text-5xl lg:text-6xl">
+                    IT Intern — Lifewood Data Technology
+                  </h2>
 
-                <p className="mt-5 border-t border-[#E1E0CC]/[0.08] pt-5 font-sans text-sm font-light leading-relaxed text-[#E1E0CC]/50 md:text-base">
-                  January – May 2026 · 540 hours · On-site Internship
-                </p>
+                  <p className="mt-5 border-t border-[#E1E0CC]/[0.08] pt-5 font-sans text-sm font-light leading-relaxed text-[#E1E0CC]/50 md:text-base">
+                    January – May 2026 · 540 hours · On-site Internship
+                  </p>
 
-                <div className="mt-8 space-y-4">
-                  {experienceHighlights.map((item, index) => (
-                    <motion.div
-                      key={item}
-                      initial={{ opacity: 0, y: 18 }}
-                      animate={showExperienceBullets ? { opacity: 1, y: 0 } : { opacity: 0, y: 18 }}
-                      transition={{
-                        duration: 0.5,
-                        delay: showExperienceBullets ? index * 0.18 : 0,
-                        ease: [0.16, 1, 0.3, 1],
-                      }}
-                      className="flex gap-3 rounded-xl border border-[#E1E0CC]/[0.08] bg-[#E1E0CC]/[0.03] p-5"
-                    >
-                      <span className="pt-1 text-sm text-[#E1E0CC]/45">•</span>
-                      <p className="font-sans text-sm font-light leading-relaxed text-[#E1E0CC]/58">
-                        {item}
-                      </p>
-                    </motion.div>
-                  ))}
-                </div>
-              </motion.div>
-            </div>
+                  <div className="mt-8 space-y-4">
+                    {experienceHighlights.map((item, index) => (
+                      <motion.div
+                        key={item}
+                        initial={{ opacity: 0, y: 18 }}
+                        animate={showExperienceBullets ? { opacity: 1, y: 0 } : { opacity: 0, y: 18 }}
+                        transition={{
+                          duration: 0.5,
+                          delay: showExperienceBullets ? index * 0.18 : 0,
+                          ease: [0.16, 1, 0.3, 1],
+                        }}
+                        className="flex gap-3 rounded-xl border border-[#E1E0CC]/[0.08] bg-[#E1E0CC]/[0.03] p-5"
+                      >
+                        <span className="pt-1 text-sm text-[#E1E0CC]/45">•</span>
+                        <p className="font-sans text-sm font-light leading-relaxed text-[#E1E0CC]/58">
+                          {item}
+                        </p>
+                      </motion.div>
+                    ))}
+                  </div>
+                </motion.div>
+              </div>
               <div className="absolute bottom-0 left-0 right-0 h-[1px] bg-[#E1E0CC]/[0.06] z-10" />
             </div>
           </div>

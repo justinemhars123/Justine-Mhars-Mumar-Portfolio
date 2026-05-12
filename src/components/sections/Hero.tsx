@@ -9,7 +9,7 @@ export default function Hero() {
   const videoY = useTransform(scrollY, [0, 1000], [0, 300]);
   const videoScale = useTransform(scrollY, [0, 1000], [1, 1.2]);
 
-  const subtitle = "Full-Stack Developer specializing in AI-powered web applications.";
+  const subtitle = "Software Developer specializing in AI-powered web applications.";
 
   return (
     <header className="relative h-screen w-full flex flex-col overflow-hidden justify-center" id="hero">

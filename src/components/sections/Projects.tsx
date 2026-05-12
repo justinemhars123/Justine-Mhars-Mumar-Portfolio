@@ -1,7 +1,17 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { motion, AnimatePresence, useInView } from 'motion/react';
+import {
+  motion,
+  AnimatePresence,
+  useInView,
+  useMotionValueEvent,
+  useScroll,
+  useSpring,
+  useTransform,
+} from 'motion/react';
 import { ExternalLink, Github, X } from 'lucide-react';
 import { CardStack } from '../ui/card-stack';
+import TextReveal from '../ui/TextReveal';
+import BlurText from '../ui/BlurText';
 
 const IMAGE_ROTATION_MS = 4500;
 const IMAGE_TRANSITION_SECONDS = 1.9;
@@ -31,7 +41,7 @@ const projectItems: ProjectItem[] = [
       '/Assets/images/Lifewood-web/Screenshot 4.png',
       '/Assets/images/Lifewood-web/Screenshot 5.png',
     ],
-    tag: 'Full Stack / AI Integration',
+    tag: 'Software / AI Integration',
     techStack: ['React', 'TypeScript', 'Vite', 'Tailwind CSS via CDN', 'Supabase'],
     highlights: [
       'Unified the public website, careers flow, and internal dashboard in one platform.',
@@ -161,10 +171,18 @@ function ProjectCard({
         )}
       </AnimatePresence>
 
-      <div className="absolute inset-0 bg-gradient-to-t from-black/45 via-transparent to-transparent pointer-events-none" />
+      <div
+        className={`absolute inset-0 pointer-events-none transition-opacity duration-500 ${
+          active ? 'bg-gradient-to-t from-black/12 via-transparent to-transparent opacity-70' : 'bg-gradient-to-t from-black/45 via-transparent to-transparent opacity-100'
+        }`}
+      />
 
       {/* Subtle dark tint: lighter on active cards, slightly deeper on inactive ones to focus the center */}
-      <div className={`absolute inset-0 pointer-events-none z-10 transition-colors duration-500 ${active ? 'bg-black/10' : 'bg-black/30'}`} />
+      <div
+        className={`absolute inset-0 pointer-events-none z-10 transition-colors duration-500 ${
+          active ? 'bg-black/0' : 'bg-black/30'
+        }`}
+      />
     </div>
   );
 }
@@ -380,8 +398,66 @@ export default function Projects() {
   const [activeProjectIndex, setActiveProjectIndex] = useState(0);
   const [activeImageIndex, setActiveImageIndex] = useState(0);
   const [expandedProjectIndex, setExpandedProjectIndex] = useState<number | null>(null);
+  const [allowRevealOverlay, setAllowRevealOverlay] = useState(true);
   const containerRef = useRef<HTMLElement | null>(null);
+  const introRef = useRef<HTMLDivElement | null>(null);
   const isInView = useInView(containerRef, { once: true, margin: '-100px' });
+  const { scrollYProgress: introProgress } = useScroll({
+    target: introRef,
+    offset: ['start start', 'end 0.45'],
+  });
+  const smoothIntroProgress = useSpring(introProgress, {
+    stiffness: 90,
+    damping: 24,
+    restDelta: 0.001,
+  });
+  const overlayGate = useSpring(allowRevealOverlay ? 1 : 0, {
+    stiffness: 180,
+    damping: 30,
+    restDelta: 0.001,
+  });
+  const textProgress = useTransform(smoothIntroProgress, [0, 0.42], [0, 1]);
+  const textOpacity = useTransform(
+    smoothIntroProgress,
+    [0, 0.42, 0.46, 0.52],
+    [1, 1, 0.18, 0]
+  );
+  const overlayOpacity = useTransform(
+    smoothIntroProgress,
+    [0, 0.42, 0.48, 0.54],
+    [1, 1, 1, 0]
+  );
+  const overlayBlur = useTransform(
+    smoothIntroProgress,
+    [0, 0.42, 0.54],
+    [0, 0, 14]
+  );
+  const overlayScale = useTransform(
+    smoothIntroProgress,
+    [0, 0.42, 0.54],
+    [1, 1, 0.985]
+  );
+  const contentOpacity = useTransform(
+    smoothIntroProgress,
+    [0, 0.32, 0.4],
+    [0, 0, 1]
+  );
+  const contentY = useTransform(
+    smoothIntroProgress,
+    [0, 0.32, 0.4],
+    [6, 6, 0]
+  );
+  const contentScale = useTransform(
+    smoothIntroProgress,
+    [0, 0.32, 0.4],
+    [0.985, 0.985, 1]
+  );
+  const gatedTextOpacity = useTransform(
+    () => textOpacity.get() * overlayGate.get()
+  );
+  const gatedOverlayOpacity = useTransform(
+    () => overlayOpacity.get() * overlayGate.get()
+  );
   const activeProject = projectItems[activeProjectIndex];
   const expandedProject = expandedProjectIndex !== null ? projectItems[expandedProjectIndex] : null;
 
@@ -435,17 +511,56 @@ export default function Projects() {
     isInView,
   ]);
 
+  useMotionValueEvent(smoothIntroProgress, 'change', (latest) => {
+    const previous = smoothIntroProgress.getPrevious() ?? latest;
+
+    if (latest > previous && latest >= 0.5) {
+      setAllowRevealOverlay(false);
+      return;
+    }
+
+    if (latest < previous && latest <= 0.18) {
+      setAllowRevealOverlay(true);
+    }
+  });
+
   return (
     <section
-      className="bg-[#161616] px-6 md:px-24 pt-20 pb-32 overflow-visible"
+      className="relative bg-[#161616] overflow-visible"
       id="projects"
       ref={containerRef}
     >
+      <div ref={introRef} className="relative h-[150vh] md:h-[165vh]">
+        <div className="sticky top-0 z-20 h-screen pointer-events-none">
+          <motion.div
+            style={{ opacity: gatedOverlayOpacity }}
+            className="absolute inset-0 bg-[#161616]"
+          />
+
+          <motion.div
+            style={{
+              opacity: gatedOverlayOpacity,
+              scale: overlayScale,
+              filter: useTransform(overlayBlur, (value) => `blur(${value}px)`),
+            }}
+            className="relative flex h-screen items-center justify-center px-6 md:px-24"
+          >
+            <TextReveal
+              backgroundColor="transparent"
+              padding="0"
+              maxWidth={980}
+              minHeight="100vh"
+              progress={textProgress}
+              opacity={gatedTextOpacity}
+            />
+          </motion.div>
+          </div>
+        
+      </div>
+
       <motion.div
-        className="max-w-7xl mx-auto w-full overflow-visible"
-        initial={{ opacity: 0, y: 40 }}
-        animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 40 }}
-        transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
+        style={{ opacity: contentOpacity, y: contentY, scale: contentScale }}
+        className="relative z-10 -mt-[100vh] max-w-7xl mx-auto w-full overflow-visible px-6 pt-20 pb-32 md:px-24"
       >
         <div className="mb-20">
           <motion.div

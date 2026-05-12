@@ -103,7 +103,7 @@ export function ZoomParallaxIntro() {
               </h1>
             </div>
             <p className="font-serif text-sm md:text-xl text-[#E1E0CC]/60 italic leading-relaxed max-w-xl mb-6 md:mb-8">
-              Full-Stack Developer specializing in AI-powered web applications.
+              Software Developer specializing in AI-powered web applications.
             </p>
             <div className="flex justify-start">
               <a
